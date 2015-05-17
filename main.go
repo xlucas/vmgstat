@@ -63,9 +63,9 @@ func main() {
 					fmt.Println(os.Stderr, err)
 				}
 
-				fmt.Println(os.Stdout, "Steal: ", stealG)
-				fmt.Println(os.Stdout, "Used : ", usedG)
-				fmt.Println(os.Stdout, "Elaspsed : ", elapsed)
+				fmt.Fprintln(os.Stdout, "Steal: ", stealG)
+				fmt.Fprintln(os.Stdout, "Used : ", usedG)
+				fmt.Fprintln(os.Stdout, "Elaspsed : ", elapsed)
 
 				/*fmt.Fprintf(w, "%02d:%02d:%02d\t%3.1f\t%3.1f\t",
 					time.Now().Hour(), time.Now().Minute(), time.Now().Second(),

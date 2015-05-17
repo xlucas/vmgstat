@@ -42,6 +42,10 @@ func main() {
 	var nStealG, nUsedG, nElapsed uint64
 	var oStealG, oUsedG, oElapsed uint64
 
+	if guestFlag {
+		fmt.Fprintln(w, "Date\tStealG\tUsedG\t")
+	}
+
 	for {
 
 		if currentCount == count {
@@ -54,8 +58,6 @@ func main() {
 
 		if !event && !firstRun {
 			if guestFlag {
-				fmt.Fprintln(w, "Date\tStealG\tUsedG\t")
-
 				if nStealG, err = s.GetCPUStolen(); err != nil {
 					fmt.Println(os.Stderr, err)
 				}
@@ -66,10 +68,6 @@ func main() {
 					fmt.Println(os.Stderr, err)
 				}
 
-				//fmt.Fprintln(os.Stdout, "Steal: ", stealG)
-				//fmt.Fprintln(os.Stdout, "Used : ", usedG)
-				//fmt.Fprintln(os.Stdout, "Elaspsed : ", elapsed)
-
 				fmt.Fprintf(w, "%02d:%02d:%02d\t%3.1f\t%3.1f\t",
 					time.Now().Hour(), time.Now().Minute(), time.Now().Second(),
 					float64((nStealG-oStealG)/(nElapsed-oElapsed)*100.0),
@@ -79,14 +77,17 @@ func main() {
 				oStealG = nStealG
 				oUsedG = nUsedG
 				oElapsed = nElapsed
+
+				w.Flush()
 			}
 		}
 
 		// Sleep and update counter
 		time.Sleep(delay)
-		currentCount += 1
 		if firstRun {
 			firstRun = false
+		} else {
+			currentCount += 1
 		}
 
 	}

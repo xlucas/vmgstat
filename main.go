@@ -23,12 +23,12 @@ func main() {
 	var delay time.Duration
 	var currentCount uint64 = 0
 
-	flag.BoolVar(&guestFlag, "-guest", true, "Fetch Guest statistics.")
-	flag.BoolVar(&hostFlag, "-host", false, "Fetch Host statistics.")
-	flag.BoolVar(&cpuFlag, "-cpu", true, "Fetch CPU statistics.")
-	flag.BoolVar(&memFlag, "-memory", true, "Fetch Memory statistics.")
-	flag.Uint64Var(&count, "-count", 5, "Refresh count")
-	flag.DurationVar(&delay, "-delay", 1*time.Second, "Refresh delay.")
+	flag.BoolVar(&guestFlag, "guest", true, "Fetch Guest statistics.")
+	flag.BoolVar(&hostFlag, "host", false, "Fetch Host statistics.")
+	flag.BoolVar(&cpuFlag, "cpu", true, "Fetch CPU statistics.")
+	flag.BoolVar(&memFlag, "memory", true, "Fetch Memory statistics.")
+	flag.Uint64Var(&count, "count", 5, "Refresh count")
+	flag.DurationVar(&delay, "delay", 1*time.Second, "Refresh delay.")
 	flag.Parse()
 
 	if s, err = vmguestlib.NewSession(); err != nil {

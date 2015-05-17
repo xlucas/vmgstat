@@ -68,7 +68,7 @@ func main() {
 					fmt.Println(os.Stderr, err)
 				}
 
-				fmt.Fprintf(w, "%02d:%02d:%02d\t%3.1f\t%3.1f\t",
+				fmt.Fprintf(w, "%02d:%02d:%02d\t%3.1f\t%3.1f\t\n",
 					time.Now().Hour(), time.Now().Minute(), time.Now().Second(),
 					float64((nStealG-oStealG)/(nElapsed-oElapsed)*100.0),
 					float64((nUsedG-oUsedG)/(nElapsed-oElapsed)*100.0),

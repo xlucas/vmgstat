@@ -51,24 +51,21 @@ func main() {
 		if !event {
 			if guestFlag {
 				var stealG, usedG, elapsed uint64
-				fmt.Fprintln(w, "Date\tStealG\tUsedG\t")
+				//fmt.Fprintln(w, "Date\tStealG\tUsedG\t")
 				if stealG, err = s.GetCPUStolen(); err != nil {
-					fmt.Println(os.Stderr, err)
-					stealG = 0
+					fmt.Println(os.Stdout, stealG)
 				}
 				if usedG, err = s.GetCPUUsed(); err != nil {
-					fmt.Println(os.Stderr, err)
-					usedG = 0
+					fmt.Println(os.Stdout, usedG)
 				}
 				if elapsed, err = s.GetTimeElapsed(); err != nil {
-					fmt.Println(os.Stderr, err)
-					elapsed = 0
+					fmt.Println(os.Stdout, elapsed)
 				}
-				fmt.Fprintf(w, "%02d:%02d:%02d\t%3.1f\t%3.1f\t",
+				/*fmt.Fprintf(w, "%02d:%02d:%02d\t%3.1f\t%3.1f\t",
 					time.Now().Hour(), time.Now().Minute(), time.Now().Second(),
 					(stealG/elapsed)*100.0,
 					(usedG/elapsed)*100.0,
-				)
+				)*/
 				w.Flush()
 			}
 		} else {

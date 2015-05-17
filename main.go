@@ -53,12 +53,15 @@ func main() {
 				var stealG, usedG, elapsed uint64
 				fmt.Fprintln(w, "Date\tStealG\tUsedG\t")
 				if stealG, err = s.GetCPUStolen(); err != nil {
+					fmt.Println(os.Stderr, err)
 					stealG = 0
 				}
 				if usedG, err = s.GetCPUUsed(); err != nil {
+					fmt.Println(os.Stderr, err)
 					usedG = 0
 				}
 				if elapsed, err = s.GetTimeElapsed(); err != nil {
+					fmt.Println(os.Stderr, err)
 					elapsed = 0
 				}
 				fmt.Fprintf(w, "%02d:%02d:%02d\t%3.1f\t%3.1f\t",

@@ -72,15 +72,13 @@ func main() {
 
 				fmt.Fprintf(w, "%02d:%02d:%02d\t%3.1f\t%3.1f\t",
 					time.Now().Hour(), time.Now().Minute(), time.Now().Second(),
-					(nStealG-oStealG)/(nElapsed-oElapsed)*100.0,
-					(nUsedG-oUsedG)/(nElapsed-oElapsed)*100.0,
+					float64((nStealG-oStealG)/(nElapsed-oElapsed)*100.0),
+					float64((nUsedG-oUsedG)/(nElapsed-oElapsed)*100.0),
 				)
 
 				oStealG = nStealG
 				oUsedG = nUsedG
 				oElapsed = nElapsed
-
-				w.Flush()
 			}
 		}
 

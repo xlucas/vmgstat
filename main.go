@@ -48,15 +48,11 @@ func main() {
 
 	for {
 
-		if currentCount == count {
-			break
-		}
-
 		if event, err = s.RefreshInfo(); err != nil {
 			fmt.Fprintln(os.Stderr, "An error occured while refreshing statistics : %s", err)
 		}
 
-		if !event && !firstRun {
+		if !event {
 			if guestFlag {
 				if nStealG, err = s.GetCPUStolen(); err != nil {
 					fmt.Println(os.Stderr, err)
@@ -68,27 +64,30 @@ func main() {
 					fmt.Println(os.Stderr, err)
 				}
 
-				fmt.Fprintf(w, "%02d:%02d:%02d\t%3.1f\t%3.1f\t\n",
-					time.Now().Hour(), time.Now().Minute(), time.Now().Second(),
-					float64((nStealG-oStealG)/(nElapsed-oElapsed)*100.0),
-					float64((nUsedG-oUsedG)/(nElapsed-oElapsed)*100.0),
-				)
+				if !firstRun {
+					fmt.Fprintf(w, "%02d:%02d:%02d\t%3.1f\t%3.1f\t\n",
+						time.Now().Hour(), time.Now().Minute(), time.Now().Second(),
+						float64((nStealG-oStealG)/(nElapsed-oElapsed)*100.0),
+						float64((nUsedG-oUsedG)/(nElapsed-oElapsed)*100.0),
+					)
+					w.Flush()
+				}
 
 				oStealG = nStealG
 				oUsedG = nUsedG
 				oElapsed = nElapsed
-
-				w.Flush()
 			}
 		}
 
-		// Sleep and update counter
-		time.Sleep(delay)
 		if firstRun {
 			firstRun = false
 		} else {
 			currentCount += 1
 		}
+		if currentCount == count {
+			break
+		}
+		time.Sleep(delay)
 
 	}
 

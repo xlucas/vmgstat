@@ -13,6 +13,7 @@ import (
 func main() {
 	var err error
 	var event bool
+	var firstRun bool = true
 	var s *vmguestlib.Session
 
 	var guestFlag bool
@@ -38,6 +39,9 @@ func main() {
 
 	w := tabwriter.NewWriter(os.Stdout, 10, 2, 2, ' ', 0)
 
+	var nStealG, nUsedG, nElapsed uint64
+	var oStealG, oUsedG, oElapsed uint64
+
 	for {
 
 		if currentCount == count {
@@ -48,40 +52,44 @@ func main() {
 			fmt.Fprintln(os.Stderr, "An error occured while refreshing statistics : %s", err)
 		}
 
-		if !event {
+		if !event && !firstRun {
 			if guestFlag {
-				var stealG, usedG, elapsed uint64
-				//fmt.Fprintln(w, "Date\tStealG\tUsedG\t")
+				fmt.Fprintln(w, "Date\tStealG\tUsedG\t")
 
-				if stealG, err = s.GetCPUStolen(); err != nil {
+				if nStealG, err = s.GetCPUStolen(); err != nil {
 					fmt.Println(os.Stderr, err)
 				}
-				if usedG, err = s.GetCPUUsed(); err != nil {
+				if nUsedG, err = s.GetCPUUsed(); err != nil {
 					fmt.Println(os.Stderr, err)
 				}
-				if elapsed, err = s.GetTimeElapsed(); err != nil {
+				if nElapsed, err = s.GetTimeElapsed(); err != nil {
 					fmt.Println(os.Stderr, err)
 				}
 
-				fmt.Fprintln(os.Stdout, "Steal: ", stealG)
-				fmt.Fprintln(os.Stdout, "Used : ", usedG)
-				fmt.Fprintln(os.Stdout, "Elaspsed : ", elapsed)
+				//fmt.Fprintln(os.Stdout, "Steal: ", stealG)
+				//fmt.Fprintln(os.Stdout, "Used : ", usedG)
+				//fmt.Fprintln(os.Stdout, "Elaspsed : ", elapsed)
 
-				/*fmt.Fprintf(w, "%02d:%02d:%02d\t%3.1f\t%3.1f\t",
+				fmt.Fprintf(w, "%02d:%02d:%02d\t%3.1f\t%3.1f\t",
 					time.Now().Hour(), time.Now().Minute(), time.Now().Second(),
-					(stealG/elapsed)*100.0,
-					(usedG/elapsed)*100.0,
-				)*/
+					(nStealG-oStealG)/(nElapsed-oElapsed)*100.0,
+					(nUsedG-oUsedG)/(nElapsed-oElapsed)*100.0,
+				)
+
+				oStealG = nStealG
+				oUsedG = nUsedG
+				oElapsed = nElapsed
 
 				w.Flush()
 			}
-		} else {
-			// A vSphere event occured, statistics should be discarded until the next RefreshInfo() call
 		}
 
 		// Sleep and update counter
 		time.Sleep(delay)
 		currentCount += 1
+		if firstRun {
+			firstRun = false
+		}
 
 	}
 

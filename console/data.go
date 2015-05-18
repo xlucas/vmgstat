@@ -2,6 +2,7 @@ package console
 
 import (
 	"math"
+	"runtime"
 	"time"
 
 	"github.com/cloudfoundry/gosigar"
@@ -93,7 +94,7 @@ func PrintCPUUsed(c *Console, n *Data, o *Data, s *vmguestlib.Session) {
 	if _, err := s.GetCPUUsed(); err != nil {
 		c.WriteNaCol()
 	} else {
-		c.WritePercentCol(float64(n.CPUUsed-o.CPUUsed) / float64(n.TimeElasped-o.TimeElasped) * 100.0)
+		c.WritePercentCol(float64(n.CPUUsed-o.CPUUsed) / float64(n.TimeElasped-o.TimeElasped) * 100.0 / float64(runtime.NumCPU()))
 	}
 }
 
@@ -101,7 +102,7 @@ func PrintCPUStolen(c *Console, n *Data, o *Data, s *vmguestlib.Session) {
 	if _, err := s.GetCPUStolen(); err != nil {
 		c.WriteNaCol()
 	} else {
-		c.WritePercentCol(float64(n.CPUStolen-o.CPUStolen) / float64(n.TimeElasped-o.TimeElasped) * 100.0)
+		c.WritePercentCol(float64(n.CPUStolen-o.CPUStolen) / float64(n.TimeElasped-o.TimeElasped) * 100.0 / float64(runtime.NumCPU()))
 	}
 }
 
@@ -137,7 +138,7 @@ func PrintHostCPUUsed(c *Console, n *Data, o *Data, s *vmguestlib.Session) {
 	if _, err := s.GetHostCPUUsed(); err != nil {
 		c.WriteNaCol()
 	} else {
-		c.WritePercentCol(float64(n.HostCPUUsed-o.HostCPUUsed) / float64(n.TimeElasped-o.TimeElasped) * 100.0)
+		c.WritePercentCol(float64(n.HostCPUUsed-o.HostCPUUsed) / float64(n.TimeElasped-o.TimeElasped) * 100.0 / float64(n.HostNumCPUCores))
 	}
 }
 

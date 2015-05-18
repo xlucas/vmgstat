@@ -10,6 +10,9 @@ VMware® vSphere Guest Statistics tool.
 ## Disclaimer
 This is not an official VMware® product.
 
+## Requirements
+The requirements are the same than [go-vmguestlib](https://github.com/xlucas/go-vmguestlib) on which `vmgstat` is built.
+
 ## Usage
 
 ```
@@ -51,7 +54,7 @@ This is not an official VMware® product.
 * CPU
   * `CUseH` : percentage of time the host was using its CPUs during the previous refresh delay divided by the CPU count on the host.
   * `CNumH` : the number of physical CPU cores on the host machine.
-  * `CSpeH` : the host processor speed.
+  * `CSpeH` : the host processor speed in GHz.
 
 * Memory
   * `MOvhH` : total host kernel memory overhead, in GB.

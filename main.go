@@ -97,12 +97,15 @@ func main() {
 	// Refresh until we reach the refresh count
 	for {
 		// Print header at start then at given frequency
-		if firstRun || count%conf.HeaderFreq == 0 {
+		if (firstRun && conf.HeaderFreq == 0) || (conf.HeaderFreq != 0 && count%conf.HeaderFreq == 0) {
 			// Print table headers
 			for _, field := range order {
 				cons.WriteHeaderCol(field)
 			}
 			cons.WriteLineEnd()
+			if !firstRun {
+				cons.WriteLineEnd()
+			}
 		}
 		// Refresh session info
 		if event, err = s.RefreshInfo(); err != nil {

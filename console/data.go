@@ -1,8 +1,10 @@
 package console
 
 import (
+	"math"
 	"time"
 
+	"github.com/cloudfoundry/gosigar"
 	"github.com/xlucas/go-vmguestlib/vmguestlib"
 )
 
@@ -44,9 +46,15 @@ type Data struct {
 	HostMemUnmapped    uint64    // Mem Host
 	TimeElasped        uint64    // Timer
 	CurrentTime        time.Time // Time
+	MemorySize         uint64    // Memory Size of the VM
+	SwapSize           uint64    // Memory Size of the VM
 }
 
 func (d *Data) Refresh(s *vmguestlib.Session) {
+	m := new(sigar.Mem)
+	w := new(sigar.Swap)
+	_ = m.Get()
+	_ = w.Get()
 	d.CPUReservation, _ = s.GetCPUReservation()
 	d.CPULimit, _ = s.GetCPULimit()
 	d.CPUShares, _ = s.GetCPUShares()
@@ -77,6 +85,8 @@ func (d *Data) Refresh(s *vmguestlib.Session) {
 	d.HostMemUnmapped, _ = s.GetHostMemUnmapped()
 	d.TimeElasped, _ = s.GetTimeElapsed()
 	d.CurrentTime = time.Now()
+	d.MemorySize = m.Total / uint64(math.Pow(2, 20))
+	d.SwapSize = w.Total / uint64(math.Pow(2, 20))
 }
 
 func PrintCPUUsed(c *Console, n *Data, o *Data, s *vmguestlib.Session) {
@@ -144,5 +154,101 @@ func PrintHostNumCPUCores(c *Console, n *Data, o *Data, s *vmguestlib.Session) {
 		c.WriteNaCol()
 	} else {
 		c.WriteUint32(n.HostNumCPUCores)
+	}
+}
+
+func PrintMemActive(c *Console, n *Data, o *Data, s *vmguestlib.Session) {
+	if _, err := s.GetMemActive(); err != nil {
+		c.WriteNaCol()
+	} else {
+		c.WritePercentCol(100.0 * float64(n.MemActive) / float64(n.MemorySize))
+	}
+}
+
+func PrintMemBallooned(c *Console, n *Data, o *Data, s *vmguestlib.Session) {
+	if _, err := s.GetMemBallooned(); err != nil {
+		c.WriteNaCol()
+	} else {
+		c.WritePercentCol(100.0 * float64(n.MemBallooned) / float64(n.MemorySize))
+	}
+}
+
+func PrintMemLimit(c *Console, n *Data, o *Data, s *vmguestlib.Session) {
+	if _, err := s.GetMemLimit(); err != nil {
+		c.WriteNaCol()
+	} else {
+		c.WriteUint32(n.MemLimit)
+	}
+}
+
+func PrintMemMapped(c *Console, n *Data, o *Data, s *vmguestlib.Session) {
+	if _, err := s.GetMemMapped(); err != nil {
+		c.WriteNaCol()
+	} else {
+		c.WriteUint32(n.MemMapped)
+	}
+}
+
+func PrintMemOverhead(c *Console, n *Data, o *Data, s *vmguestlib.Session) {
+	if _, err := s.GetMemOverhead(); err != nil {
+		c.WriteNaCol()
+	} else {
+		c.WriteUint32(n.MemOverhead)
+	}
+}
+
+func PrintMemReservation(c *Console, n *Data, o *Data, s *vmguestlib.Session) {
+	if _, err := s.GetMemReservation(); err != nil {
+		c.WriteNaCol()
+	} else {
+		c.WriteUint32(n.MemReservation)
+	}
+}
+
+func PrintMemShares(c *Console, n *Data, o *Data, s *vmguestlib.Session) {
+	if _, err := s.GetMemShares(); err != nil {
+		c.WriteNaCol()
+	} else {
+		c.WriteUint32(n.MemShares)
+	}
+}
+
+func PrintMemShared(c *Console, n *Data, o *Data, s *vmguestlib.Session) {
+	if _, err := s.GetMemShared(); err != nil {
+		c.WriteNaCol()
+	} else {
+		c.WriteUint32(n.MemShared)
+	}
+}
+
+func PrintMemSharedSaved(c *Console, n *Data, o *Data, s *vmguestlib.Session) {
+	if _, err := s.GetMemSharedSaved(); err != nil {
+		c.WriteNaCol()
+	} else {
+		c.WriteUint32(n.MemSharedSaved)
+	}
+}
+
+func PrintMemSwapped(c *Console, n *Data, o *Data, s *vmguestlib.Session) {
+	if _, err := s.GetMemSwapped(); err != nil {
+		c.WriteNaCol()
+	} else {
+		c.WritePercentCol(100 * float64(n.MemSwapped) / float64(n.SwapSize))
+	}
+}
+
+func PrintMemUsed(c *Console, n *Data, o *Data, s *vmguestlib.Session) {
+	if _, err := s.GetMemUsed(); err != nil {
+		c.WriteNaCol()
+	} else {
+		c.WriteUint32(n.MemUsed)
+	}
+}
+
+func PrintMemTargetSize(c *Console, n *Data, o *Data, s *vmguestlib.Session) {
+	if _, err := s.GetMemTargetSize(); err != nil {
+		c.WriteNaCol()
+	} else {
+		c.WriteUint64(n.MemTargetSize)
 	}
 }

@@ -26,7 +26,7 @@ func main() {
 	flag.BoolVar(&conf.Guest, "guest", true, "Show guest information.")
 	flag.BoolVar(&conf.Host, "host", false, "Show host information.")
 	flag.BoolVar(&conf.Cpu, "cpu", true, "Show cpu stats.")
-	flag.BoolVar(&conf.Mem, "mem", true, "Show memory stats.")
+	flag.BoolVar(&conf.Mem, "mem", false, "Show memory stats.")
 	flag.UintVar(&conf.Count, "count", 0, "Refresh count.")
 	flag.DurationVar(&conf.Delay, "delay", 1*time.Second, "Refresh delay.")
 	flag.Parse()
@@ -49,6 +49,7 @@ func main() {
 	console.AppendField(&fields, &order, "Time", console.PrintCurrentTime)
 
 	if conf.Guest {
+		// Guest CPU stats
 		if conf.Cpu {
 			console.AppendField(&fields, &order, "CLimG", console.PrintCPULimit)
 			console.AppendField(&fields, &order, "CResG", console.PrintCPUReservation)
@@ -56,16 +57,30 @@ func main() {
 			console.AppendField(&fields, &order, "CStlG", console.PrintCPUStolen)
 			console.AppendField(&fields, &order, "CUseG", console.PrintCPUUsed)
 		}
+		// Guest Memory stats
 		if conf.Mem {
-
+			console.AppendField(&fields, &order, "MActG", console.PrintMemActive)
+			console.AppendField(&fields, &order, "MBalG", console.PrintMemBallooned)
+			console.AppendField(&fields, &order, "MLimG", console.PrintMemLimit)
+			console.AppendField(&fields, &order, "MMapG", console.PrintMemMapped)
+			console.AppendField(&fields, &order, "MOvhG", console.PrintMemOverhead)
+			console.AppendField(&fields, &order, "MResG", console.PrintMemReservation)
+			console.AppendField(&fields, &order, "MShaG", console.PrintMemShares)
+			console.AppendField(&fields, &order, "MShdG", console.PrintMemShared)
+			console.AppendField(&fields, &order, "MShSG", console.PrintMemSharedSaved)
+			console.AppendField(&fields, &order, "MSwaG", console.PrintMemSwapped)
+			console.AppendField(&fields, &order, "MTarG", console.PrintMemTargetSize)
+			console.AppendField(&fields, &order, "MUseG", console.PrintMemUsed)
 		}
 	}
 	if conf.Host {
+		// Host CPU stats
 		if conf.Cpu {
 			console.AppendField(&fields, &order, "CUseH", console.PrintHostCPUUsed)
 			console.AppendField(&fields, &order, "CNumH", console.PrintHostNumCPUCores)
 			console.AppendField(&fields, &order, "CSpeH", console.PrintHostProcessorSpeed)
 		}
+		// Memory stats
 		if conf.Mem {
 
 		}

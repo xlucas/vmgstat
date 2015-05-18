@@ -49,20 +49,26 @@ func main() {
 	console.AppendField(&fields, &order, "Time", console.PrintCurrentTime)
 
 	if conf.Guest {
-		console.AppendField(&fields, &order, "CLimG", console.PrintCPULimit)
-		console.AppendField(&fields, &order, "CResG", console.PrintCPUReservation)
-		console.AppendField(&fields, &order, "CShaG", console.PrintCPUShares)
-		console.AppendField(&fields, &order, "CStlG", console.PrintCPUStolen)
-		console.AppendField(&fields, &order, "CUseG", console.PrintCPUUsed)
+		if conf.Cpu {
+			console.AppendField(&fields, &order, "CLimG", console.PrintCPULimit)
+			console.AppendField(&fields, &order, "CResG", console.PrintCPUReservation)
+			console.AppendField(&fields, &order, "CShaG", console.PrintCPUShares)
+			console.AppendField(&fields, &order, "CStlG", console.PrintCPUStolen)
+			console.AppendField(&fields, &order, "CUseG", console.PrintCPUUsed)
+		}
+		if conf.Mem {
+
+		}
 	}
 	if conf.Host {
+		if conf.Cpu {
+			console.AppendField(&fields, &order, "CUseH", console.PrintHostCPUUsed)
+			console.AppendField(&fields, &order, "CNumH", console.PrintHostNumCPUCores)
+			console.AppendField(&fields, &order, "CSpeH", console.PrintHostProcessorSpeed)
+		}
+		if conf.Mem {
 
-	}
-	if conf.Cpu {
-
-	}
-	if conf.Mem {
-
+		}
 	}
 
 	// Print table headers

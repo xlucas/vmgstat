@@ -110,3 +110,19 @@ func PrintCPUReservation(c *Console, n *Data, o *Data, s *vmguestlib.Session) {
 func PrintCPUShares(c *Console, n *Data, o *Data, s *vmguestlib.Session) {
 	c.WriteUint32(n.CPUShares)
 }
+
+func PrintHostCPUUsed(c *Console, n *Data, o *Data, s *vmguestlib.Session) {
+	if _, err := s.GetHostCPUUsed(); err != nil {
+		c.WriteNaCol()
+	} else {
+		c.WritePercentCol(float64((n.HostCPUUsed - o.HostCPUUsed) / (n.TimeElasped - o.TimeElasped)))
+	}
+}
+
+func PrintHostProcessorSpeed(c *Console, n *Data, o *Data, s *vmguestlib.Session) {
+	c.WriteUint32(n.HostProcessorSpeed)
+}
+
+func PrintHostNumCPUCores(c *Console, n *Data, o *Data, s *vmguestlib.Session) {
+	c.WriteUint32(n.HostNumCPUCores)
+}

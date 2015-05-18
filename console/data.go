@@ -177,7 +177,7 @@ func PrintMemLimit(c *Console, n *Data, o *Data, s *vmguestlib.Session) {
 	if _, err := s.GetMemLimit(); err != nil {
 		c.WriteNaCol()
 	} else {
-		c.WriteUint32(n.MemLimit / 1024)
+		c.WriteFloat64(float64(n.MemLimit) / 1024.0)
 	}
 }
 
@@ -185,7 +185,7 @@ func PrintMemMapped(c *Console, n *Data, o *Data, s *vmguestlib.Session) {
 	if _, err := s.GetMemMapped(); err != nil {
 		c.WriteNaCol()
 	} else {
-		c.WriteUint32(n.MemMapped / 1024)
+		c.WriteFloat64(float64(n.MemMapped) / 1024.0)
 	}
 }
 
@@ -193,7 +193,7 @@ func PrintMemOverhead(c *Console, n *Data, o *Data, s *vmguestlib.Session) {
 	if _, err := s.GetMemOverhead(); err != nil {
 		c.WriteNaCol()
 	} else {
-		c.WriteUint32(n.MemOverhead / 1024)
+		c.WriteFloat64(float64(n.MemOverhead) / 1024.0)
 	}
 }
 
@@ -201,7 +201,7 @@ func PrintMemReservation(c *Console, n *Data, o *Data, s *vmguestlib.Session) {
 	if _, err := s.GetMemReservation(); err != nil {
 		c.WriteNaCol()
 	} else {
-		c.WriteUint32(n.MemReservation / 1024)
+		c.WriteFloat64(float64(n.MemReservation) / 1024.0)
 	}
 }
 
@@ -209,7 +209,7 @@ func PrintMemShares(c *Console, n *Data, o *Data, s *vmguestlib.Session) {
 	if _, err := s.GetMemShares(); err != nil {
 		c.WriteNaCol()
 	} else {
-		c.WriteUint32(n.MemShares / 1024)
+		c.WriteUint32(n.MemShares)
 	}
 }
 
@@ -217,7 +217,7 @@ func PrintMemShared(c *Console, n *Data, o *Data, s *vmguestlib.Session) {
 	if _, err := s.GetMemShared(); err != nil {
 		c.WriteNaCol()
 	} else {
-		c.WriteUint32(n.MemShared / 1024)
+		c.WriteFloat64(float64(n.MemShared) / 1024.0)
 	}
 }
 
@@ -225,7 +225,7 @@ func PrintMemSharedSaved(c *Console, n *Data, o *Data, s *vmguestlib.Session) {
 	if _, err := s.GetMemSharedSaved(); err != nil {
 		c.WriteNaCol()
 	} else {
-		c.WriteUint32(n.MemSharedSaved / 1024)
+		c.WriteFloat64(float64(n.MemSharedSaved) / 1024.0)
 	}
 }
 
@@ -241,7 +241,7 @@ func PrintMemUsed(c *Console, n *Data, o *Data, s *vmguestlib.Session) {
 	if _, err := s.GetMemUsed(); err != nil {
 		c.WriteNaCol()
 	} else {
-		c.WriteUint32(n.MemUsed / 1024)
+		c.WriteFloat64(float64(n.MemUsed) / 1024.0)
 	}
 }
 
@@ -249,6 +249,6 @@ func PrintMemTargetSize(c *Console, n *Data, o *Data, s *vmguestlib.Session) {
 	if _, err := s.GetMemTargetSize(); err != nil {
 		c.WriteNaCol()
 	} else {
-		c.WriteUint64(n.MemTargetSize / 1024)
+		c.WriteFloat64(float64(n.MemTargetSize) / 1024.0)
 	}
 }

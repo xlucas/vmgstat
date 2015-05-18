@@ -98,3 +98,15 @@ func PrintCPUStolen(c *Console, n *Data, o *Data, s *vmguestlib.Session) {
 func PrintCurrentTime(c *Console, n *Data, o *Data, s *vmguestlib.Session) {
 	c.WriteTimeCol(n.CurrentTime)
 }
+
+func PrintCPULimit(c *Console, n *Data, o *Data, s *vmguestlib.Session) {
+	c.WriteUint32(n.CPULimit)
+}
+
+func PrintCPUReservation(c *Console, n *Data, o *Data, s *vmguestlib.Session) {
+	c.WriteUint32(n.CPUReservation)
+}
+
+func PrintCPUShares(c *Console, n *Data, o *Data, s *vmguestlib.Session) {
+	c.WriteUint32(n.CPUShares)
+}

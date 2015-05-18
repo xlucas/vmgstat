@@ -33,24 +33,25 @@ func main() {
 
 	count := uint(0)
 	cons := &console.Console{Table: tabwriter.NewWriter(os.Stdout, 10, 2, 0, ' ', 0)}
-	nData := new(console.Data)
-	oData := new(console.Data)
-	event := false
-	firstRun := true
-	s, err := vmguestlib.NewSession()
+	nData, oData := new(console.Data), new(console.Data)
+	event, firstRun := false, true
+	fields := make(map[string]console.PrintFunc)
+	order := make([]string, 0)
 
+	// Open vSphere session
+	s, err := vmguestlib.NewSession()
 	// Probably missing the VMware tools
 	if err != nil {
 		exit(err)
 	}
 
-	fields := make(map[string]console.PrintFunc)
-	order := make([]string, 0)
-
 	// Append fields
 	console.AppendField(&fields, &order, "Time", console.PrintCurrentTime)
 
 	if conf.Guest {
+		console.AppendField(&fields, &order, "CLimG", console.PrintCPULimit)
+		console.AppendField(&fields, &order, "CResG", console.PrintCPUReservation)
+		console.AppendField(&fields, &order, "CShaG", console.PrintCPUShares)
 		console.AppendField(&fields, &order, "CStlG", console.PrintCPUStolen)
 		console.AppendField(&fields, &order, "CUseG", console.PrintCPUUsed)
 	}
@@ -77,16 +78,13 @@ func main() {
 		if event, err = s.RefreshInfo(); err != nil {
 			exit(err)
 		}
-
 		// Retrieve new data
 		nData.Refresh(s)
-
 		// vSphere event occured
 		if event {
 			fmt.Fprintln(os.Stdout, "--- VSPHERE GUEST SESSION CHANGED! WAIT FOR NEXT REFRESH ... ---")
 			goto End
 		}
-
 		// Display field values
 		if !firstRun {
 			for _, field := range order {
@@ -98,13 +96,13 @@ func main() {
 		}
 
 	End:
-		// Increment refresh counter, save data then sleep
+		// Increment refresh counter if needed
 		if (conf.Count != 0) || (count == conf.Count-1) {
 			break
 		} else {
 			count++
 		}
-
+		// Save data and sleep
 		copier.Copy(oData, nData)
 		time.Sleep(conf.Delay)
 

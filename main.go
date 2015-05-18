@@ -103,9 +103,9 @@ func main() {
 
 	End:
 		// Increment refresh counter if needed
-		if (conf.Count != 0) || (count == conf.Count-1) {
+		if count == conf.Count {
 			break
-		} else {
+		} else if !firstRun {
 			count++
 		}
 		// Save data and sleep

@@ -161,7 +161,7 @@ func PrintMemActive(c *Console, n *Data, o *Data, s *vmguestlib.Session) {
 	if _, err := s.GetMemActive(); err != nil {
 		c.WriteNaCol()
 	} else {
-		c.WritePercentCol(100.0 * float64(n.MemActive) / float64(n.MemorySize))
+		c.WriteFloat64(float64(n.MemActive) / 1024.0)
 	}
 }
 
@@ -169,7 +169,7 @@ func PrintMemBallooned(c *Console, n *Data, o *Data, s *vmguestlib.Session) {
 	if _, err := s.GetMemBallooned(); err != nil {
 		c.WriteNaCol()
 	} else {
-		c.WritePercentCol(100.0 * float64(n.MemBallooned) / float64(n.MemorySize))
+		c.WriteFloat64(float64(n.MemBallooned) / 1024.0)
 	}
 }
 
@@ -250,5 +250,69 @@ func PrintMemTargetSize(c *Console, n *Data, o *Data, s *vmguestlib.Session) {
 		c.WriteNaCol()
 	} else {
 		c.WriteFloat64(float64(n.MemTargetSize) / 1024.0)
+	}
+}
+
+func PrintHostMemKernOvhd(c *Console, n *Data, o *Data, s *vmguestlib.Session) {
+	if _, err := s.GetHostMemKernOvhd(); err != nil {
+		c.WriteNaCol()
+	} else {
+		c.WriteFloat64(float64(n.HostMemKernOvhd) / 1024.0)
+	}
+}
+
+func PrintHostMemMapped(c *Console, n *Data, o *Data, s *vmguestlib.Session) {
+	if _, err := s.GetHostMemMapped(); err != nil {
+		c.WriteNaCol()
+	} else {
+		c.WriteFloat64(float64(n.HostMemMapped) / 1024.0)
+	}
+}
+
+func PrintHostMemPhys(c *Console, n *Data, o *Data, s *vmguestlib.Session) {
+	if _, err := s.GetHostMemPhys(); err != nil {
+		c.WriteNaCol()
+	} else {
+		c.WriteFloat64(float64(n.HostMemPhys) / 1024.0)
+	}
+}
+
+func PrintHostMemPhysFree(c *Console, n *Data, o *Data, s *vmguestlib.Session) {
+	if _, err := s.GetHostMemPhysFree(); err != nil {
+		c.WriteNaCol()
+	} else {
+		c.WriteFloat64(float64(n.HostMemPhysFree) / 1024.0)
+	}
+}
+
+func PrintHostMemShared(c *Console, n *Data, o *Data, s *vmguestlib.Session) {
+	if _, err := s.GetHostMemShared(); err != nil {
+		c.WriteNaCol()
+	} else {
+		c.WriteFloat64(float64(n.HostMemShared) / 1024.0)
+	}
+}
+
+func PrintHostMemSwapped(c *Console, n *Data, o *Data, s *vmguestlib.Session) {
+	if _, err := s.GetHostMemSwapped(); err != nil {
+		c.WriteNaCol()
+	} else {
+		c.WriteFloat64(float64(n.HostMemSwapped) / 1024.0)
+	}
+}
+
+func PrintHostMemUnmapped(c *Console, n *Data, o *Data, s *vmguestlib.Session) {
+	if _, err := s.GetHostMemUnmapped(); err != nil {
+		c.WriteNaCol()
+	} else {
+		c.WriteFloat64(float64(n.HostMemUnmapped) / 1024.0)
+	}
+}
+
+func PrintHostMemUsed(c *Console, n *Data, o *Data, s *vmguestlib.Session) {
+	if _, err := s.GetHostMemUsed(); err != nil {
+		c.WriteNaCol()
+	} else {
+		c.WriteFloat64(float64(n.HostMemUsed) / 1024.0)
 	}
 }

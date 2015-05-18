@@ -82,7 +82,14 @@ func main() {
 		}
 		// Memory stats
 		if conf.Mem {
-
+			console.AppendField(&fields, &order, "MOvhH", console.PrintHostMemKernOvhd)
+			console.AppendField(&fields, &order, "MMapH", console.PrintHostMemMapped)
+			console.AppendField(&fields, &order, "MPhyH", console.PrintHostMemPhys)
+			console.AppendField(&fields, &order, "MFreH", console.PrintHostMemPhysFree)
+			console.AppendField(&fields, &order, "MShaH", console.PrintHostMemShared)
+			console.AppendField(&fields, &order, "MSwaH", console.PrintMemSwapped)
+			console.AppendField(&fields, &order, "MUnmH", console.PrintHostMemUnmapped)
+			console.AppendField(&fields, &order, "MUseH", console.PrintHostMemUsed)
 		}
 	}
 

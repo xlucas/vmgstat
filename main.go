@@ -33,7 +33,7 @@ func main() {
 	flag.Parse()
 
 	count := uint(0)
-	cons := &console.Console{Table: tabwriter.NewWriter(os.Stdout, 9, 2, 0, ' ', 0)}
+	cons := &console.Console{Table: tabwriter.NewWriter(os.Stdout, 9, 2, 0, ' ', tabwriter.AlignRight)}
 	nData, oData := new(console.Data), new(console.Data)
 	event, firstRun := false, true
 	fields := make(map[string]console.PrintFunc)

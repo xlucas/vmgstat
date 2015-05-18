@@ -13,13 +13,6 @@ import (
 	"github.com/xlucas/vmgstat/console"
 )
 
-type printFunc func(*console.Console, *console.Data, *console.Data, *vmguestlib.Session)
-
-func appendField(fields *map[string]printFunc, order *[]string, name string, value printFunc) {
-	(*fields)[name] = value
-	*order = append(*order, name)
-}
-
 func exit(err error) {
 	if err != nil {
 		fmt.Println(os.Stderr, "An error occured : ", err)
@@ -51,15 +44,15 @@ func main() {
 		exit(err)
 	}
 
-	fields := make(map[string]printFunc)
+	fields := make(map[string]console.PrintFunc)
 	order := make([]string, 0)
 
 	// Append fields
-	appendField(&fields, &order, "Time", console.PrintCurrentTime)
+	console.AppendField(&fields, &order, "Time", console.PrintCurrentTime)
 
 	if conf.Guest {
-		appendField(&fields, &order, "CStlG", console.PrintCPUStolen)
-		appendField(&fields, &order, "CUseG", console.PrintCPUUsed)
+		console.AppendField(&fields, &order, "CStlG", console.PrintCPUStolen)
+		console.AppendField(&fields, &order, "CUseG", console.PrintCPUUsed)
 	}
 	if conf.Host {
 

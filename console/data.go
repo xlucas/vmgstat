@@ -6,6 +6,13 @@ import (
 	"github.com/xlucas/go-vmguestlib/vmguestlib"
 )
 
+type PrintFunc func(*Console, *Data, *Data, *vmguestlib.Session)
+
+func AppendField(fields *map[string]PrintFunc, order *[]string, name string, value PrintFunc) {
+	(*fields)[name] = value
+	*order = append(*order, name)
+}
+
 type Data struct {
 	CPUReservation     uint32    // CPU Guest
 	CPULimit           uint32    // CPU Guest

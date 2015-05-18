@@ -24,11 +24,11 @@ func (c *Console) WritePercentCol(value float64) {
 }
 
 func (c *Console) WriteUint32(value uint32) {
-	fmt.Fprintf(c.Table, "%3.1E\t", value)
+	fmt.Fprintf(c.Table, "%3.1E\t", float64(value))
 }
 
 func (c *Console) WriteUint64(value uint64) {
-	fmt.Fprintf(c.Table, "%3.1E\t", value)
+	fmt.Fprintf(c.Table, "%3.1E\t", float64(value))
 }
 
 func (c *Console) WriteTimeCol(value time.Time) {

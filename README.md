@@ -1,7 +1,7 @@
 # vmgstat
 
 [![Github licence](https://img.shields.io/github/license/xlucas/vmgstat.svg)](LICENSE)
-[![GitHub version](https://img.shields.io/github/release/xlucas/go-vmguestlib.svg)](https://github.com/xlucas/go-vmguestlib/releases/tag/v1.0.0)
+[![GitHub version](https://img.shields.io/github/release/xlucas/vmgstat.svg)](https://github.com/xlucas/vmgstat/releases/tag/v1.0.0)
 
 VMware® vSphere Guest Statistics tool.
 

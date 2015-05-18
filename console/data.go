@@ -1,11 +1,9 @@
 package console
 
 import (
-	"math"
 	"runtime"
 	"time"
 
-	"github.com/cloudfoundry/gosigar"
 	"github.com/xlucas/go-vmguestlib/vmguestlib"
 )
 
@@ -47,15 +45,9 @@ type Data struct {
 	HostMemUnmapped    uint64    // Mem Host
 	TimeElasped        uint64    // Timer
 	CurrentTime        time.Time // Time
-	MemorySize         uint64    // Memory Size of the VM
-	SwapSize           uint64    // Memory Size of the VM
 }
 
 func (d *Data) Refresh(s *vmguestlib.Session) {
-	m := new(sigar.Mem)
-	w := new(sigar.Swap)
-	_ = m.Get()
-	_ = w.Get()
 	d.CPUReservation, _ = s.GetCPUReservation()
 	d.CPULimit, _ = s.GetCPULimit()
 	d.CPUShares, _ = s.GetCPUShares()
@@ -86,8 +78,6 @@ func (d *Data) Refresh(s *vmguestlib.Session) {
 	d.HostMemUnmapped, _ = s.GetHostMemUnmapped()
 	d.TimeElasped, _ = s.GetTimeElapsed()
 	d.CurrentTime = time.Now()
-	d.MemorySize = m.Total / uint64(math.Pow(2, 20))
-	d.SwapSize = w.Total / uint64(math.Pow(2, 20))
 }
 
 func PrintCPUUsed(c *Console, n *Data, o *Data, s *vmguestlib.Session) {
@@ -234,7 +224,7 @@ func PrintMemSwapped(c *Console, n *Data, o *Data, s *vmguestlib.Session) {
 	if _, err := s.GetMemSwapped(); err != nil {
 		c.WriteNaCol()
 	} else {
-		c.WritePercentCol(100 * float64(n.MemSwapped) / float64(n.SwapSize))
+		c.WriteFloat64(float64(n.MemSwapped) / 1024.0)
 	}
 }
 

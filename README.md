@@ -17,7 +17,7 @@ This is not an official VMware® product.
 --guest  : Stats from guest     Default value : true
 --header : Header print step    Default value : 0 (only at start)
 --host   : Stats from host      Default value : false
---mem    : Show memory stats    Default value : false
+--memory : Show memory stats    Default value : false
 ```
 
 ## Metrics :

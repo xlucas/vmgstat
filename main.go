@@ -68,7 +68,7 @@ func main() {
 			console.AppendField(&fields, &order, "MResG", console.PrintMemReservation)
 			console.AppendField(&fields, &order, "MShaG", console.PrintMemShares)
 			console.AppendField(&fields, &order, "MShdG", console.PrintMemShared)
-			console.AppendField(&fields, &order, "MShSG", console.PrintMemSharedSaved)
+			console.AppendField(&fields, &order, "MShsG", console.PrintMemSharedSaved)
 			console.AppendField(&fields, &order, "MSwaG", console.PrintMemSwapped)
 			console.AppendField(&fields, &order, "MTarG", console.PrintMemTargetSize)
 			console.AppendField(&fields, &order, "MUseG", console.PrintMemUsed)

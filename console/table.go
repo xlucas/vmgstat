@@ -20,15 +20,15 @@ func (c *Console) WriteLineEnd() {
 }
 
 func (c *Console) WritePercentCol(value float64) {
-	fmt.Fprintf(c.Table, "%3.1f\t", value)
+	fmt.Fprintf(c.Table, "%5.2f\t", value)
 }
 
 func (c *Console) WriteFloat64(value float64) {
-	fmt.Fprintf(c.Table, "%5.2g\t", value)
+	fmt.Fprintf(c.Table, "%3.1g\t", value)
 }
 
 func (c *Console) WriteUint32(value uint32) {
-	fmt.Fprintf(c.Table, "%3.1e\t", float64(value))
+	fmt.Fprintf(c.Table, "%3.1g\t", float64(value))
 }
 
 func (c *Console) WriteTimeCol(value time.Time) {

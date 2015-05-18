@@ -7,87 +7,103 @@ import (
 	"text/tabwriter"
 	"time"
 
+	"github.com/jinzhu/copier"
 	"github.com/xlucas/go-vmguestlib/vmguestlib"
+	"github.com/xlucas/vmgstat/cli"
+	"github.com/xlucas/vmgstat/console"
 )
 
+func exit(err error) {
+	if err != nil {
+		fmt.Println(os.Stderr, "An error occured : ", err)
+	}
+	os.Exit(1)
+}
+
 func main() {
-	var err error
-	var event bool
-	var firstRun bool = true
-	var s *vmguestlib.Session
+	conf := cli.Config{}
 
-	var guestFlag bool
-	var hostFlag bool
-	var cpuFlag bool
-	var memFlag bool
-	var count uint64
-	var delay time.Duration
-	var currentCount uint64 = 0
-
-	flag.BoolVar(&guestFlag, "guest", true, "Fetch Guest statistics.")
-	flag.BoolVar(&hostFlag, "host", false, "Fetch Host statistics.")
-	flag.BoolVar(&cpuFlag, "cpu", true, "Fetch CPU statistics.")
-	flag.BoolVar(&memFlag, "memory", true, "Fetch Memory statistics.")
-	flag.Uint64Var(&count, "count", 5, "Refresh count")
-	flag.DurationVar(&delay, "delay", 1*time.Second, "Refresh delay.")
+	flag.BoolVar(&conf.Guest, "guest", true, "Show guest information.")
+	flag.BoolVar(&conf.Host, "host", false, "Show host information.")
+	flag.BoolVar(&conf.Cpu, "cpu", false, "Show cpu stats.")
+	flag.BoolVar(&conf.Mem, "mem", false, "Show memory stats.")
+	flag.UintVar(&conf.Count, "count", 0, "Refresh count.")
+	flag.DurationVar(&conf.Delay, "delay", 1*time.Second, "Refresh delay.")
 	flag.Parse()
 
-	if s, err = vmguestlib.NewSession(); err != nil {
-		fmt.Fprintln(os.Stderr, "An error occured while opening a new session : %s", err)
-		return
+	count := uint(0)
+	cons := &console.Console{Table: tabwriter.NewWriter(os.Stdout, 8, 2, 2, '\t', 0)}
+	nData := new(console.Data)
+	oData := new(console.Data)
+	event := false
+	firstRun := true
+	s, err := vmguestlib.NewSession()
+
+	// Probably missing the VMware tools
+	if err != nil {
+		exit(err)
 	}
 
-	w := tabwriter.NewWriter(os.Stdout, 10, 2, 2, ' ', 0)
+	fields := make(map[string]func(c *console.Console, n *console.Data, o *console.Data, s *vmguestlib.Session))
 
-	var nStealG, nUsedG, nElapsed uint64
-	var oStealG, oUsedG, oElapsed uint64
+	fields["Time"] = console.PrintCurrentTime
 
-	if guestFlag {
-		fmt.Fprintln(w, "Date\tStealG\tUsedG\t")
+	if conf.Guest {
+		fields["CStlG"] = console.PrintCPUStolen
+		fields["CUseG"] = console.PrintCPUUsed
+	}
+	if conf.Host {
+
+	}
+	if conf.Cpu {
+
+	}
+	if conf.Mem {
+
 	}
 
+	// Print table headers
+	for field, _ := range fields {
+		cons.WriteHeaderCol(field)
+	}
+	cons.WriteLineEnd()
+
+	// Refresh until we reach the refresh count
 	for {
 
+		// Refresh session info
 		if event, err = s.RefreshInfo(); err != nil {
-			fmt.Fprintln(os.Stderr, "An error occured while refreshing statistics : %s", err)
+			exit(err)
 		}
 
-		if !event {
-			if guestFlag {
-				if nStealG, err = s.GetCPUStolen(); err != nil {
-					fmt.Println(os.Stderr, err)
-				}
-				if nUsedG, err = s.GetCPUUsed(); err != nil {
-					fmt.Println(os.Stderr, err)
-				}
-				if nElapsed, err = s.GetTimeElapsed(); err != nil {
-					fmt.Println(os.Stderr, err)
-				}
+		// Retrieve new data
+		nData.Refresh(s)
 
-				if !firstRun {
-					fmt.Fprintf(w, "%02d:%02d:%02d\t%3.1f\t%3.1f\t\n",
-						time.Now().Hour(), time.Now().Minute(), time.Now().Second(),
-						float64((nStealG-oStealG)/(nElapsed-oElapsed)*100.0),
-						float64((nUsedG-oUsedG)/(nElapsed-oElapsed)*100.0),
-					)
-					w.Flush()
-				}
+		// vSphere event occured
+		if event {
+			fmt.Fprintln(os.Stdout, "--- VSPHERE GUEST SESSION CHANGED! WAIT FOR NEXT REFRESH ... ---")
+			goto End
+		}
 
-				oStealG = nStealG
-				oUsedG = nUsedG
-				oElapsed = nElapsed
+		// Display field values
+		if !firstRun {
+			for _, call := range fields {
+				call(cons, nData, oData, s)
 			}
+		} else {
+			firstRun = false
 		}
 
-		if firstRun {
-			firstRun = false
-		} else {
-			currentCount += 1
-		}
-		if currentCount == count {
+	End:
+		// Increment refresh counter, save data then sleep
+		if (conf.Count != 0) || (count == conf.Count-1) {
 			break
+		} else {
+			count += 1
 		}
-		time.Sleep(delay)
+
+		copier.Copy(oData, nData)
+		time.Sleep(conf.Delay)
 
 	}
 

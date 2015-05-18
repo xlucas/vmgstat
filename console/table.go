@@ -24,11 +24,20 @@ func (c *Console) WritePercentCol(value float64) {
 }
 
 func (c *Console) WriteFloat64(value float64) {
-	fmt.Fprintf(c.Table, "%3.1e\t", value)
+	if value < 1000000.0 {
+		c.WritePercentCol(value)
+	} else {
+
+		fmt.Fprintf(c.Table, "%3.1e\t", value)
+	}
 }
 
 func (c *Console) WriteUint32(value uint32) {
-	fmt.Fprintf(c.Table, "%3.1e\t", float64(value))
+	if value < 1000000.0 {
+		c.WritePercentCol(float64(value))
+	} else {
+		fmt.Fprintf(c.Table, "%3.1e\t", float64(value))
+	}
 }
 
 func (c *Console) WriteTimeCol(value time.Time) {

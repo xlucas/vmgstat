@@ -5,6 +5,8 @@
 
 VMware® vSphere Guest Statistics tool.
 
+![ScreenShort](screenshot.png)
+
 ## Disclaimer
 This is not an official VMware® product.
 

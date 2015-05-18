@@ -25,8 +25,8 @@ func main() {
 
 	flag.BoolVar(&conf.Guest, "guest", true, "Show guest information.")
 	flag.BoolVar(&conf.Host, "host", false, "Show host information.")
-	flag.BoolVar(&conf.Cpu, "cpu", false, "Show cpu stats.")
-	flag.BoolVar(&conf.Mem, "mem", false, "Show memory stats.")
+	flag.BoolVar(&conf.Cpu, "cpu", true, "Show cpu stats.")
+	flag.BoolVar(&conf.Mem, "mem", true, "Show memory stats.")
 	flag.UintVar(&conf.Count, "count", 0, "Refresh count.")
 	flag.DurationVar(&conf.Delay, "delay", 1*time.Second, "Refresh delay.")
 	flag.Parse()

@@ -28,6 +28,7 @@ func main() {
 	flag.BoolVar(&conf.Cpu, "cpu", true, "Show cpu stats.")
 	flag.BoolVar(&conf.Mem, "mem", false, "Show memory stats.")
 	flag.UintVar(&conf.Count, "count", 0, "Refresh count.")
+	flag.UintVar(&conf.HeaderFreq, "header", 0, "Header print step.")
 	flag.DurationVar(&conf.Delay, "delay", 1*time.Second, "Refresh delay.")
 	flag.Parse()
 
@@ -93,15 +94,16 @@ func main() {
 		}
 	}
 
-	// Print table headers
-	for _, field := range order {
-		cons.WriteHeaderCol(field)
-	}
-	cons.WriteLineEnd()
-
 	// Refresh until we reach the refresh count
 	for {
-
+		// Print header at start then at given frequency
+		if firstRun || count%conf.HeaderFreq == 0 {
+			// Print table headers
+			for _, field := range order {
+				cons.WriteHeaderCol(field)
+			}
+			cons.WriteLineEnd()
+		}
 		// Refresh session info
 		if event, err = s.RefreshInfo(); err != nil {
 			exit(err)
@@ -133,7 +135,5 @@ func main() {
 		// Save data and sleep
 		copier.Copy(oData, nData)
 		time.Sleep(conf.Delay)
-
 	}
-
 }

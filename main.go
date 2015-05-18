@@ -13,10 +13,9 @@ import (
 	"github.com/xlucas/vmgstat/console"
 )
 
-func appendField(fields *map[string]func(*console.Console, *console.Data, *console.Data, *vmguestlib.Session),
-	order *[]string,
-	name string,
-	value func(*console.Console, *console.Data, *console.Data, *vmguestlib.Session)) {
+type printFunc func(*console.Console, *console.Data, *console.Data, *vmguestlib.Session)
+
+func appendField(fields *map[string]printFunc, order *[]string, name string, value printFunc) {
 	(*fields)[name] = value
 	*order = append(*order, name)
 }
@@ -52,7 +51,7 @@ func main() {
 		exit(err)
 	}
 
-	fields := make(map[string]func(c *console.Console, n *console.Data, o *console.Data, s *vmguestlib.Session))
+	fields := make(map[string]printFunc)
 	order := make([]string, 0)
 
 	// Append fields

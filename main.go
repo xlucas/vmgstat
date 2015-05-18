@@ -118,7 +118,7 @@ func main() {
 
 	End:
 		// Increment refresh counter if needed
-		if conf.Count != 0 || count == conf.Count {
+		if conf.Count > 0 && count == conf.Count {
 			break
 		} else if !firstRun {
 			count++

@@ -11,7 +11,7 @@ type Console struct {
 }
 
 func (c *Console) WriteHeaderCol(name string) {
-	fmt.Fprintf(c.Table, name, '\t')
+	fmt.Fprintf(c.Table, "%s\t", name)
 }
 
 func (c *Console) WriteLineEnd() {

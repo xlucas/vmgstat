@@ -4,6 +4,7 @@ import (
 	"flag"
 	"fmt"
 	"os"
+	"sort"
 	"text/tabwriter"
 	"time"
 
@@ -32,7 +33,7 @@ func main() {
 	flag.Parse()
 
 	count := uint(0)
-	cons := &console.Console{Table: tabwriter.NewWriter(os.Stdout, 8, 2, 2, '\t', 0)}
+	cons := &console.Console{Table: tabwriter.NewWriter(os.Stdout, 8, 2, 0, ' ', 0)}
 	nData := new(console.Data)
 	oData := new(console.Data)
 	event := false
@@ -46,6 +47,7 @@ func main() {
 
 	fields := make(map[string]func(c *console.Console, n *console.Data, o *console.Data, s *vmguestlib.Session))
 
+	// Append fields
 	fields["Time"] = console.PrintCurrentTime
 
 	if conf.Guest {
@@ -62,8 +64,20 @@ func main() {
 
 	}
 
-	// Print table headers
+	// Get map keys and sort them
+	names := make([]string, len(fields))
+	offset := 0
+
+	// Retrieve fields names
 	for field, _ := range fields {
+		names[offset] = field
+		offset++
+	}
+
+	sort.Strings(names)
+
+	// Print table headers
+	for _, field := range names {
 		cons.WriteHeaderCol(field)
 	}
 	cons.WriteLineEnd()
@@ -87,9 +101,10 @@ func main() {
 
 		// Display field values
 		if !firstRun {
-			for _, call := range fields {
-				call(cons, nData, oData, s)
+			for _, field := range names {
+				fields[field](cons, nData, oData, s)
 			}
+			cons.WriteLineEnd()
 		} else {
 			firstRun = false
 		}
@@ -99,7 +114,7 @@ func main() {
 		if (conf.Count != 0) || (count == conf.Count-1) {
 			break
 		} else {
-			count += 1
+			count++
 		}
 
 		copier.Copy(oData, nData)

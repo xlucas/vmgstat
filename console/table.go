@@ -15,7 +15,7 @@ type Console struct {
 
 func (c *Console) WriteHeaderCol(name string) {
 	if c.Color {
-		fmt.Fprintf(c.Table, "%s%s\t", ansi.Color(name, "yellow+b"), ansi.ColorCode("reset"))
+		fmt.Fprintf(c.Table, "%s %7s %s\t", ansi.ColorCode("yellow+b"), name, ansi.ColorCode("reset"))
 	} else {
 		fmt.Fprintf(c.Table, "%s\t", name)
 	}

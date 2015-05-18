@@ -31,10 +31,6 @@ func (c *Console) WriteUint32(value uint32) {
 	fmt.Fprintf(c.Table, "%3.1e\t", float64(value))
 }
 
-func (c *Console) WriteUint64(value uint64) {
-	fmt.Fprintf(c.Table, "%3.1e\t", float64(value))
-}
-
 func (c *Console) WriteTimeCol(value time.Time) {
 	fmt.Fprintf(c.Table, "%02d:%02d:%02d\t", value.Hour(), value.Minute(), value.Second())
 }

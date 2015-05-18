@@ -113,7 +113,7 @@ func PrintCPULimit(c *Console, n *Data, o *Data, s *vmguestlib.Session) {
 	if _, err := s.GetCPULimit(); err != nil {
 		c.WriteNaCol()
 	} else {
-		c.WriteUint32(n.CPULimit)
+		c.WriteFloat64(float64(n.CPULimit) / 1000.0)
 	}
 }
 
@@ -121,7 +121,7 @@ func PrintCPUReservation(c *Console, n *Data, o *Data, s *vmguestlib.Session) {
 	if _, err := s.GetCPUReservation(); err != nil {
 		c.WriteNaCol()
 	} else {
-		c.WriteUint32(n.CPUReservation)
+		c.WriteFloat64(float64(n.CPUReservation) / 1000.0)
 	}
 }
 
@@ -145,7 +145,7 @@ func PrintHostProcessorSpeed(c *Console, n *Data, o *Data, s *vmguestlib.Session
 	if _, err := s.GetHostProcessorSpeed(); err != nil {
 		c.WriteNaCol()
 	} else {
-		c.WriteUint32(n.HostProcessorSpeed)
+		c.WriteFloat64(float64(n.HostProcessorSpeed) / 1000.0)
 	}
 }
 

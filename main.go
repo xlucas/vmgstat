@@ -4,7 +4,6 @@ import (
 	"flag"
 	"fmt"
 	"os"
-	"sort"
 	"text/tabwriter"
 	"time"
 
@@ -13,6 +12,14 @@ import (
 	"github.com/xlucas/vmgstat/cli"
 	"github.com/xlucas/vmgstat/console"
 )
+
+func appendField(fields *map[string]func(*console.Console, *console.Data, *console.Data, *vmguestlib.Session),
+	order *[]string,
+	name string,
+	value func(*console.Console, *console.Data, *console.Data, *vmguestlib.Session)) {
+	(*fields)[name] = value
+	*order = append(*order, name)
+}
 
 func exit(err error) {
 	if err != nil {
@@ -33,7 +40,7 @@ func main() {
 	flag.Parse()
 
 	count := uint(0)
-	cons := &console.Console{Table: tabwriter.NewWriter(os.Stdout, 8, 2, 0, ' ', 0)}
+	cons := &console.Console{Table: tabwriter.NewWriter(os.Stdout, 10, 2, 0, ' ', 0)}
 	nData := new(console.Data)
 	oData := new(console.Data)
 	event := false
@@ -46,13 +53,14 @@ func main() {
 	}
 
 	fields := make(map[string]func(c *console.Console, n *console.Data, o *console.Data, s *vmguestlib.Session))
+	order := make([]string, 0)
 
 	// Append fields
-	fields["Time"] = console.PrintCurrentTime
+	appendField(&fields, &order, "Time", console.PrintCurrentTime)
 
 	if conf.Guest {
-		fields["CStlG"] = console.PrintCPUStolen
-		fields["CUseG"] = console.PrintCPUUsed
+		appendField(&fields, &order, "CStlG", console.PrintCPUStolen)
+		appendField(&fields, &order, "CUseG", console.PrintCPUUsed)
 	}
 	if conf.Host {
 
@@ -64,20 +72,8 @@ func main() {
 
 	}
 
-	// Get map keys and sort them
-	names := make([]string, len(fields))
-	offset := 0
-
-	// Retrieve fields names
-	for field, _ := range fields {
-		names[offset] = field
-		offset++
-	}
-
-	sort.Strings(names)
-
 	// Print table headers
-	for _, field := range names {
+	for _, field := range order {
 		cons.WriteHeaderCol(field)
 	}
 	cons.WriteLineEnd()
@@ -101,7 +97,7 @@ func main() {
 
 		// Display field values
 		if !firstRun {
-			for _, field := range names {
+			for _, field := range order {
 				fields[field](cons, nData, oData, s)
 			}
 			cons.WriteLineEnd()

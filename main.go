@@ -23,6 +23,7 @@ func exit(err error) {
 func main() {
 	conf := cli.Config{}
 
+	flag.BoolVar(&conf.Color, "color", true, "Use colors.")
 	flag.BoolVar(&conf.Guest, "guest", true, "Show guest information.")
 	flag.BoolVar(&conf.Host, "host", false, "Show host information.")
 	flag.BoolVar(&conf.Cpu, "cpu", true, "Show cpu stats.")
@@ -33,7 +34,10 @@ func main() {
 	flag.Parse()
 
 	count := uint(0)
-	cons := &console.Console{Table: tabwriter.NewWriter(os.Stdout, 9, 2, 0, ' ', tabwriter.AlignRight)}
+	cons := &console.Console{
+		Table: tabwriter.NewWriter(os.Stdout, 9, 2, 0, ' ', tabwriter.AlignRight),
+		Color: conf.Color,
+	}
 	nData, oData := new(console.Data), new(console.Data)
 	event, firstRun := false, true
 	fields := make(map[string]console.PrintFunc)

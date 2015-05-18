@@ -4,14 +4,21 @@ import (
 	"fmt"
 	"text/tabwriter"
 	"time"
+
+	"github.com/mgutz/ansi"
 )
 
 type Console struct {
 	Table *tabwriter.Writer
+	Color bool
 }
 
 func (c *Console) WriteHeaderCol(name string) {
-	fmt.Fprintf(c.Table, "%s\t", name)
+	if c.Color {
+		fmt.Fprintf(c.Table, "%s%s\t", ansi.Color(name, "yellow+b"), ansi.ColorCode("reset"))
+	} else {
+		fmt.Fprintf(c.Table, "%s\t", name)
+	}
 }
 
 func (c *Console) WriteLineEnd() {
@@ -41,7 +48,11 @@ func (c *Console) WriteUint32(value uint32) {
 }
 
 func (c *Console) WriteTimeCol(value time.Time) {
-	fmt.Fprintf(c.Table, "%02d:%02d:%02d\t", value.Hour(), value.Minute(), value.Second())
+	if c.Color {
+		fmt.Fprintf(c.Table, "%s%02d:%02d:%02d%s\t", ansi.ColorCode("yellow+b"), value.Hour(), value.Minute(), value.Second(), ansi.ColorCode("reset"))
+	} else {
+		fmt.Fprintf(c.Table, "%02d:%02d:%02d\t", value.Hour(), value.Minute(), value.Second())
+	}
 }
 
 func (c *Console) WriteNaCol() {

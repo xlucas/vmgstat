@@ -100,15 +100,27 @@ func PrintCurrentTime(c *Console, n *Data, o *Data, s *vmguestlib.Session) {
 }
 
 func PrintCPULimit(c *Console, n *Data, o *Data, s *vmguestlib.Session) {
-	c.WriteUint32(n.CPULimit)
+	if _, err := s.GetCPULimit(); err != nil {
+		c.WriteNaCol()
+	} else {
+		c.WriteUint32(n.CPULimit)
+	}
 }
 
 func PrintCPUReservation(c *Console, n *Data, o *Data, s *vmguestlib.Session) {
-	c.WriteUint32(n.CPUReservation)
+	if _, err := s.GetCPUReservation(); err != nil {
+		c.WriteNaCol()
+	} else {
+		c.WriteUint32(n.CPUReservation)
+	}
 }
 
 func PrintCPUShares(c *Console, n *Data, o *Data, s *vmguestlib.Session) {
-	c.WriteUint32(n.CPUShares)
+	if _, err := s.GetCPUShares(); err != nil {
+		c.WriteNaCol()
+	} else {
+		c.WriteUint32(n.CPUShares)
+	}
 }
 
 func PrintHostCPUUsed(c *Console, n *Data, o *Data, s *vmguestlib.Session) {
@@ -120,9 +132,17 @@ func PrintHostCPUUsed(c *Console, n *Data, o *Data, s *vmguestlib.Session) {
 }
 
 func PrintHostProcessorSpeed(c *Console, n *Data, o *Data, s *vmguestlib.Session) {
-	c.WriteUint32(n.HostProcessorSpeed)
+	if _, err := s.GetHostProcessorSpeed(); err != nil {
+		c.WriteNaCol()
+	} else {
+		c.WriteUint32(n.HostProcessorSpeed)
+	}
 }
 
 func PrintHostNumCPUCores(c *Console, n *Data, o *Data, s *vmguestlib.Session) {
-	c.WriteUint32(n.HostNumCPUCores)
+	if _, err := s.GetHostNumCPUCores(); err != nil {
+		c.WriteNaCol()
+	} else {
+		c.WriteUint32(n.HostNumCPUCores)
+	}
 }

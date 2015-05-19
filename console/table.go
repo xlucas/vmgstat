@@ -34,7 +34,6 @@ func (c *Console) WriteFloat64(value float64) {
 	if value < 100000.0 {
 		c.WritePercentCol(value)
 	} else {
-
 		fmt.Fprintf(c.Table, "%3.1e\t", value)
 	}
 }

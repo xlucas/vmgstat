@@ -14,7 +14,7 @@ This is not an official VMware® product.
 The requirements are the same than [go-vmguestlib](https://github.com/xlucas/go-vmguestlib) on which `vmgstat` is built.
 
 ## Usage
-This tool uses golang flags library, thus options should be passed as `--<name>=<value>`. The `deflay` flags use golang's duration flag which means you can use `<T>ns`, `<T>us` `<T>ms`, `<T>s`, `<T>m`, `<T>h` as values where T is a positive number.
+This tool uses golang flags library, thus options should be passed as `--<name>=<value>`. The `delay` flags use golang's duration flag which means you can use `<T>ns`, `<T>us` `<T>ms`, `<T>s`, `<T>m`, `<T>h` as values where T is a positive number.
 
 ```
 --color  : Use colors           Default value : true

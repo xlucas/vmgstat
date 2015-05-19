@@ -101,7 +101,7 @@ func main() {
 	// Refresh until we reach the refresh count
 	for {
 		// Print header at start then at given frequency
-		if (firstRun && conf.HeaderFreq == 0) || (conf.HeaderFreq != 0 && (count-1)%conf.HeaderFreq == 0) {
+		if (firstRun && conf.HeaderFreq == 0) || (count > 0 && conf.HeaderFreq != 0 && (count-1)%conf.HeaderFreq == 0) {
 			if !firstRun && conf.HeaderFreq != 0 && count > 1 {
 				cons.WriteLineEnd()
 			}

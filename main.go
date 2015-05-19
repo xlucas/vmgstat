@@ -45,7 +45,7 @@ func main() {
 
 	// Open vSphere session
 	s, err := vmguestlib.NewSession()
-	// Probably missing the VMware tools
+	// Probably guest API runtime components are disabled
 	if err != nil {
 		exit(err)
 	}
@@ -85,7 +85,7 @@ func main() {
 			console.AppendField(&fields, &order, "CNumH", console.PrintHostNumCPUCores)
 			console.AppendField(&fields, &order, "CSpeH", console.PrintHostProcessorSpeed)
 		}
-		// Memory stats
+		// Host Memory stats
 		if conf.Mem {
 			console.AppendField(&fields, &order, "MOvhH", console.PrintHostMemKernOvhd)
 			console.AppendField(&fields, &order, "MMapH", console.PrintHostMemMapped)
@@ -98,10 +98,11 @@ func main() {
 		}
 	}
 
-	// Refresh until we reach the refresh count
+	// Refresh until we reach the refresh count if any
 	for {
 		// Print header at start then at given frequency
 		if (firstRun && conf.HeaderFreq == 0) || (count > 0 && conf.HeaderFreq != 0 && (count-1)%conf.HeaderFreq == 0) {
+			// Print an empty line if we reached the header step
 			if !firstRun && conf.HeaderFreq != 0 && count > 1 {
 				cons.WriteLineEnd()
 			}

@@ -8,6 +8,6 @@ deps:
 	go get -d -v $(DEPS)
 
 test: deps
-		go test -v ./...
+	go test -v ./...
 
 .PHONY: deps test

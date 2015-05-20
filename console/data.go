@@ -104,7 +104,11 @@ func PrintCPULimit(c *Console, n *Data, o *Data, s *vmguestlib.Session) {
 	if _, err := s.GetCPULimit(); err != nil {
 		c.WriteNaCol()
 	} else {
-		c.WriteFloat64(float64(n.CPULimit) / 1000.0)
+		if n.CPULimit == 0xFFFFFFFF {
+			c.WriteString("nolimit")
+		} else {
+			c.WriteFloat64(float64(n.CPULimit) / 1000.0)
+		}
 	}
 }
 
@@ -168,7 +172,11 @@ func PrintMemLimit(c *Console, n *Data, o *Data, s *vmguestlib.Session) {
 	if _, err := s.GetMemLimit(); err != nil {
 		c.WriteNaCol()
 	} else {
-		c.WriteFloat64(float64(n.MemLimit) / 1024.0)
+		if n.MemLimit == 0xFFFFFFFF {
+			c.WriteString("nolimit")
+		} else {
+			c.WriteFloat64(float64(n.MemLimit) / 1024.0)
+		}
 	}
 }
 

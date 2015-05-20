@@ -46,6 +46,10 @@ func (c *Console) WriteUint32(value uint32) {
 	}
 }
 
+func (c *Console) WriteString(msg string) {
+	fmt.Fprintf(c.Table, "%s\t", msg)
+}
+
 func (c *Console) WriteTimeCol(value time.Time) {
 	if c.Color {
 		fmt.Fprintf(c.Table, "%s%02d:%02d:%02d%s\t", ansi.ColorCode("yellow+b"), value.Hour(), value.Minute(), value.Second(), ansi.ColorCode("reset"))

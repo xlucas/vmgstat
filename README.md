@@ -1,6 +1,6 @@
 # vmgstat
 
-[![GitHub version](https://badge.fury.io/gh/xlucas%2Fvmgstat.svg)](https://github.com/xlucas/vmgstat/releases/tag/v1.4.0)
+[![GitHub version](https://img.shields.io/github/release/xlucas/vmgstat.svg)](https://github.com/xlucas/vmgstat/releases/tag/v1.4.0)
 
 VMware® vSphere Guest Statistics tool.
 
